@@ -23,6 +23,7 @@ import automatic_email
 
 region_code= '&gl=US&ceid=US:en'
 toggle_topic= False
+device= None
 
 api_key_gemini = st.secrets["API_KEY_GEMINI"]
 api_key_mistral = st.secrets["API_KEY_MISTRAL"]
@@ -149,14 +150,18 @@ SetBackground('graphics/wwdc-glowing-violet-3840x2160-19118.png')
 #st.cache_data.clear()
 
 page_width = streamlit_js_eval(js_expressions='window.innerWidth', key='WIDTH',  want_output = True)
+page_width= 700
+print("criteria:", st.secrets["screen_size"])
 
 try:
     if page_width and page_width <= st.secrets["screen_size"]:
+        device= "Mobile"
         st.title("Unsupported Device Display Resolution :(")
         st.write("")
         st.markdown(f'<p style="color:red;">This application is currently optimized for desktop use only. For the best experience, please access it through a desktop browser.</p>', unsafe_allow_html=True)
-        st.write(f"Size: "+ {page_width})
+        st.markdown(f'<p style="color:red;">Width: {page_width} px</p>', unsafe_allow_html=True)
     else:
+        device= "PC"
         zoom_js = """
         <script>
         document.body.style.zoom = "10%";
@@ -481,7 +486,7 @@ try:
                 client_code= client_code
 
                 # Append data
-                row = [host_name, time_of_request, os_info, client_code, topic, region, sources_count, news_count, isprioritize]
+                row = [host_name, time_of_request, os_info, client_code, topic, region, sources_count, news_count, isprioritize, device]
                 sh.append_row(row)
         except Exception as e2:
             print("Error in saving user data: ", e2)
@@ -1427,7 +1432,7 @@ except Exception as e1:
             error_log= error_log
 
             # Append data
-            row_err = [host_name, time_of_request, os_info, client_code, error_log, topic, region, sources_count, news_count, isprioritize]
+            row_err = [host_name, time_of_request, os_info, client_code, error_log, topic, region, sources_count, news_count, isprioritize, device]
             sh_error.append_row(row_err)
     except:
         pass
