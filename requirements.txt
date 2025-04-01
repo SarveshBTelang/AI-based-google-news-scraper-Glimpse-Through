@@ -40,6 +40,7 @@ gitdb
 GitPython
 google-auth
 google-genai
+gspread
 h11
 httpcore
 httpx
@@ -82,6 +83,7 @@ nbformat
 nest_asyncio
 notebook_shim
 numpy
+oauth2client
 pandas
 pandocfilters
 parse

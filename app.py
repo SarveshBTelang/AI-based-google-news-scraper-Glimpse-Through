@@ -12,6 +12,8 @@ import re
 import time
 from mistralai import Mistral
 import traceback
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
 # custom
 import utils
@@ -25,6 +27,33 @@ api_key_gemini = st.secrets["API_KEY_GEMINI"]
 api_key_mistral = st.secrets["API_KEY_MISTRAL"]
 email_notification= st.secrets["EMAIL_NOTIFICATION"]
 email_pwd = st.secrets["EMAIL_PASSWORD"]
+
+if email_notification:
+    #automatic_email.send_email("glimpsethrough98@gmail.com", "glimpsethrough98@gmail.com", body, pwd= email_pwd)
+    # Define scope
+    scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+
+    # Authenticate using the JSON key file
+    #creds = ServiceAccountCredentials.from_json_keyfile_name('GT_user_data.json', scope)
+    #client = gspread.authorize(creds)
+
+    creds_dict = {
+        "type": st.secrets["type"],
+        "project_id": st.secrets["project_id"],
+        "private_key_id": st.secrets["private_key_id"],
+        "private_key": st.secrets["private_key"].replace('\\n', '\n'),  # Fix newline issues
+        "client_email": st.secrets["client_email"],
+        "client_id": st.secrets["client_id"],
+        "auth_uri": st.secrets["auth_uri"],
+        "token_uri": st.secrets["token_uri"],
+        "auth_provider_x509_cert_url": st.secrets["auth_provider_x509_cert_url"],
+        "client_x509_cert_url": st.secrets["client_x509_cert_url"],
+        "universe_domain": st.secrets["universe_domain"]
+    }
+
+    # Authenticate using the credentials dictionary
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+    client = gspread.authorize(creds)
 
 def render_page(topics):
     """Streamlit UI using CSS, Javascript and HTML"""
@@ -118,6 +147,14 @@ st.set_page_config(page_title="News Dashboard", layout="wide", page_icon="graphi
 SetBackground('graphics/wwdc-glowing-violet-3840x2160-19118.png')
 #st.cache_data.clear()
 
+zoom_js = """
+<script>
+document.body.style.zoom = "90%";
+</script>
+"""
+
+st.markdown(zoom_js, unsafe_allow_html=True)
+
 try:
     # User Input
     topics= ["Top Stories⚡", "Technology", "Automobile", "AI", "Stock market", "Sports", "Finance", "Entertainment", "Science", "Politics", "Lifestyle", "Soccer", "Cricket", "F1"]
@@ -194,6 +231,8 @@ try:
         """,
         unsafe_allow_html=True
     )
+
+    skfhskifskf
 
     hide_elements = """
             <style>
@@ -412,6 +451,7 @@ try:
                 print("Server Error.. Please try again after sometime :(")
     else:
         isresponse= True
+        client_code=3
         defaults= ['The New York Times', 'The Guardian', 'DW News', 'Moneycontrol', 'Bloomberg', 'TechCrunch','Reuters','BBC','The Verge','WION', ]
         extract_response = defaults[:sources_count]
 
@@ -425,9 +465,20 @@ try:
         client_code: {client_code}
         """
         if email_notification:
-            automatic_email.send_email("glimpsethrough98@gmail.com", "glimpsethrough98@gmail.com", body, pwd= email_pwd)
-    except:
-        pass
+            # Open the Google Sheet and select the worksheet
+            sh = client.open('user_run_request').worksheet('Sheet1')
+
+            # Define row data
+            host_name= hostname
+            time_of_request= datetime.now().isoformat()
+            os_info= os_info
+            client_code= client_code
+
+            # Append data
+            row = [host_name, time_of_request, os_info, client_code]
+            sh.append_row(row)
+    except Exception as e2:
+        print("Error in saving user data: ", e2)
 
     if isresponse and extract_response:
         output_lines = []
@@ -1358,10 +1409,23 @@ except Exception as e1:
         error_log: {error_log}
         """
         if email_notification:
-            automatic_email.send_bug_report("glimpsethrough98@gmail.com", "telang.sarvesh98@gmail.com", body, pwd= email_pwd)
+            #automatic_email.send_bug_report("glimpsethrough98@gmail.com", "telang.sarvesh98@gmail.com", body, pwd= email_pwd)
+            # Open the Google Sheet and select the worksheet
+            sh_error = client.open('error_bug_report').worksheet('Sheet1')
+
+            # Define row data
+            host_name= hostname
+            time_of_request= datetime.now().isoformat()
+            os_info= os_info
+            client_code= client_code
+            error_log= error_log
+
+            # Append data
+            row_err = [host_name, time_of_request, os_info, client_code, error_log]
+            sh_error.append_row(row_err)
     except:
         pass
 
     lottie_animation3 = utils.get("graphics/Animation_10.json")
-    st_lottie(lottie_animation3, speed=1, reverse=True, height=700, loop=True, quality="high", key="logo")
+    st_lottie(lottie_animation3, speed=1, reverse=True, height=700, loop=True, quality="high", key="logo1")
     
