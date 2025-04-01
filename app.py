@@ -171,7 +171,7 @@ try:
                 error_log= f"Unsupported Device Display Resolution. Tried with Width:{page_width}"
 
                 # Append data
-                row_err = [host_name, time_of_request, os_info, client_code, error_log]
+                row_err = [host_name, time_of_request, os_info, error_log]
                 sh_error.append_row(row_err)
         except:
             pass
@@ -1446,7 +1446,7 @@ except Exception as e1:
             error_log= error_log
 
             # Append data
-            row_err = [host_name, time_of_request, os_info, client_code, error_log, topic, region, sources_count, news_count, isprioritize]
+            row_err = [host_name, time_of_request, os_info, error_log, client_code, topic, region, sources_count, news_count, isprioritize]
             sh_error.append_row(row_err)
     except:
         pass
