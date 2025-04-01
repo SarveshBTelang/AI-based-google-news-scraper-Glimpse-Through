@@ -112,9 +112,6 @@ pyquery
 python-dateutil
 python-json-logger
 pytrends
-pytz
-pywin32
-pywinpty
 PyYAML
 pyzmq
 queuelib
