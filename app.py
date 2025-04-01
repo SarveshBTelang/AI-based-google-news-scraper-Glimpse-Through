@@ -150,20 +150,20 @@ SetBackground('graphics/wwdc-glowing-violet-3840x2160-19118.png')
 
 page_width = streamlit_js_eval(js_expressions='window.innerWidth', key='WIDTH',  want_output = True)
 
-zoom_js = """
-<script>
-document.body.style.zoom = "90%";
-</script>
-"""
-
-st.markdown(zoom_js, unsafe_allow_html=True)
-
 try:
-    if page_width and page_width <=800:
+    if page_width and page_width <= st.secrets["screen_size"]:
         st.title("Unsupported Device Display Resolution :(")
         st.write("")
         st.markdown(f'<p style="color:red;">This application is currently optimized for desktop use only. For the best experience, please access it through a desktop browser.</p>', unsafe_allow_html=True)
+        st.write(f"Size: "+ {page_width})
     else:
+        zoom_js = """
+        <script>
+        document.body.style.zoom = "10%";
+        </script>
+        """
+
+        st.markdown(zoom_js, unsafe_allow_html=True)
         # User Input
         topics= ["Top Stories⚡", "Technology", "Automobile", "AI", "Stock market", "Sports", "Finance", "Entertainment", "Science", "Politics", "Lifestyle", "Soccer", "Cricket", "F1"]
         region_list= {'World':'&hl=en','USA':'&hl=en&gl=US&ceid=US:en', 'GER':'&hl=de&gl=DE&ceid=DE:de', 'IND (eng)':'&hl=en&gl=IN&ceid=IN:en', 'IND (hindi)':'&hl=hi&gl=IN&ceid=IN:hi', 'UK':'&hl=en&gl=GB&ceid=GB:en', 'AUS':'&hl=en&gl=AU&ceid=AU:en', 'CAN':'&hl=en&gl=CA&ceid=CA:en', 'FRA':'&hl=fr&gl=FR&ceid=FR:fr', 'ESP':'&hl=es&gl=ES&ceid=ES:es', 'ITA':'&hl=it&gl=IT&ceid=IT:it', 'NL':'&hl=nl&gl=NL&ceid=NL:nl', 'PT':'&hl=pt-PT&gl=PT&ceid=PT:pt-PT', 'BRA':'&hl=pt-BR&gl=BR&ceid=BR:pt-BR', 'RUS':'&hl=ru&gl=RU&ceid=RU:ru', 'CHN':'&hl=zh-CN&gl=CN&ceid=CN:zh-CN', 'JPN':'&hl=ja&gl=JP&ceid=JP:ja'}
