@@ -135,6 +135,7 @@ soupsieve
 stack_data
 streamlit
 streamlit-lottie
+streamlit_js_eval
 tenacity
 terminado
 tinycss2
