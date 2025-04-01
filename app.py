@@ -23,7 +23,6 @@ import automatic_email
 
 region_code= '&gl=US&ceid=US:en'
 toggle_topic= False
-device= "NoInfo"
 
 api_key_gemini = st.secrets["API_KEY_GEMINI"]
 api_key_mistral = st.secrets["API_KEY_MISTRAL"]
@@ -153,19 +152,42 @@ page_width = streamlit_js_eval(js_expressions='window.innerWidth', key='WIDTH', 
 
 try:
     if page_width and page_width <= st.secrets["screen_size"]:
-        device= "Mobile"
         st.title("Unsupported Device Display Resolution :(")
         st.write("")
         st.markdown(f'<p style="color:red;">This application is currently optimized for desktop use only. For the best experience, please access it through a desktop browser.</p>', unsafe_allow_html=True)
         st.markdown(f'<p style="color:red;">Width: {page_width} px</p>', unsafe_allow_html=True)
+        try:
+            hostname = socket.gethostname()
+            os_info = platform.system() + " " + platform.release()
+            if email_notification:
+                #automatic_email.send_bug_report("glimpsethrough98@gmail.com", "telang.sarvesh98@gmail.com", body, pwd= email_pwd)
+                # Open the Google Sheet and select the worksheet
+                sh_error = client.open('error_bug_report').worksheet('Sheet1')
+
+                # Define row data
+                host_name= hostname
+                time_of_request= datetime.now().isoformat()
+                os_info= os_info
+                client_code= None
+                topic = None
+                region= None
+                sources_count= None
+                news_count= None
+                isprioritize= None
+                error_log= f"Unsupported Device Display Resolution. Tried with Width:{page_width}"
+
+                # Append data
+                row_err = [host_name, time_of_request, os_info, client_code, error_log, topic, region, sources_count, news_count, isprioritize]
+                sh_error.append_row(row_err)
+        except:
+            pass
     else:
-        device= "PC"
         zoom_js = """
         <script>
         document.body.style.zoom = "10%";
         </script>
         """
-        
+
         st.markdown(zoom_js, unsafe_allow_html=True)
         # User Input
         topics= ["Top Stories⚡", "Technology", "Automobile", "AI", "Stock market", "Sports", "Finance", "Entertainment", "Science", "Politics", "Lifestyle", "Soccer", "Cricket", "F1"]
@@ -463,6 +485,31 @@ try:
             client_code=3
             defaults= ['The New York Times', 'The Guardian', 'DW News', 'Moneycontrol', 'Bloomberg', 'TechCrunch','Reuters','BBC','The Verge','WION', ]
             extract_response = defaults[:sources_count]
+
+        try:
+            hostname = socket.gethostname()
+            os_info = platform.system() + " " + platform.release()
+            body = f"""\
+            time: {datetime.now()}
+            host_name: {hostname}
+            os_info: {os_info}
+            client_code: {client_code}
+            """
+            if email_notification:
+                # Open the Google Sheet and select the worksheet
+                sh = client.open('user_run_request').worksheet('Sheet1')
+
+                # Define row data
+                host_name= hostname
+                time_of_request= datetime.now().isoformat()
+                os_info= os_info
+                client_code= client_code
+
+                # Append data
+                row = [host_name, time_of_request, os_info, client_code, topic, region, sources_count, news_count, isprioritize]
+                sh.append_row(row)
+        except Exception as e2:
+            print("Error in saving user data: ", e2)
 
         if isresponse and extract_response:
             output_lines = []
@@ -1376,31 +1423,6 @@ try:
             unsafe_allow_html=True
         )
 
-    try:
-        hostname = socket.gethostname()
-        os_info = platform.system() + " " + platform.release()
-        body = f"""\
-        time: {datetime.now()}
-        host_name: {hostname}
-        os_info: {os_info}
-        client_code: {client_code}
-        """
-        if email_notification:
-            # Open the Google Sheet and select the worksheet
-            sh = client.open('user_run_request').worksheet('Sheet1')
-
-            # Define row data
-            host_name= hostname
-            time_of_request= datetime.now().isoformat()
-            os_info= os_info
-            client_code= client_code
-
-            # Append data
-            row = [host_name, time_of_request, os_info, client_code, topic, region, sources_count, news_count, isprioritize, device]
-            sh.append_row(row)
-    except Exception as e2:
-        print("Error in saving user data: ", e2)
-
 except Exception as e1:
     st.title("Server Error... Please try again after sometime :(")
     st.write("")
@@ -1430,7 +1452,7 @@ except Exception as e1:
             error_log= error_log
 
             # Append data
-            row_err = [host_name, time_of_request, os_info, client_code, error_log, topic, region, sources_count, news_count, isprioritize, device]
+            row_err = [host_name, time_of_request, os_info, client_code, error_log, topic, region, sources_count, news_count, isprioritize]
             sh_error.append_row(row_err)
     except:
         pass
