@@ -23,7 +23,7 @@ import automatic_email
 
 region_code= '&gl=US&ceid=US:en'
 toggle_topic= False
-device= None
+ifcompatible= None
 
 api_key_gemini = st.secrets["API_KEY_GEMINI"]
 api_key_mistral = st.secrets["API_KEY_MISTRAL"]
@@ -153,13 +153,11 @@ page_width = streamlit_js_eval(js_expressions='window.innerWidth', key='WIDTH', 
 
 try:
     if page_width and page_width <= st.secrets["screen_size"]:
-        device= "Mobile"
         st.title("Unsupported Device Display Resolution :(")
         st.write("")
         st.markdown(f'<p style="color:red;">This application is currently optimized for desktop use only. For the best experience, please access it through a desktop browser.</p>', unsafe_allow_html=True)
         st.markdown(f'<p style="color:red;">Width: {page_width} px</p>', unsafe_allow_html=True)
     else:
-        device= "PC"
         zoom_js = """
         <script>
         document.body.style.zoom = "10%";
@@ -174,6 +172,7 @@ try:
         isresponse= False
         isdefault= False
         prompt= None
+        ifcompatible=True
 
         # Apply custom CSS to make dropdowns transparent and align them horizontally
         st.markdown("""
@@ -476,6 +475,11 @@ try:
             if email_notification:
                 # Open the Google Sheet and select the worksheet
                 sh = client.open('user_run_request').worksheet('Sheet1')
+
+                if ifcompatible:
+                    device= "PC"
+                else:
+                    device= "Mobile"
 
                 # Define row data
                 host_name= hostname
