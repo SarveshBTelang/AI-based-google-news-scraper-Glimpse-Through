@@ -281,7 +281,7 @@ try:
                 sources_count = st.slider(
                     "News Sources Count:",
                     min_value=1,
-                    max_value=15,
+                    max_value=10,
                     value=5,
                     key="sources_count"
                 )
@@ -290,7 +290,7 @@ try:
                 news_count = st.slider(
                     "News Count:",
                     min_value=1,
-                    max_value=20,
+                    max_value=15,
                     value=10,
                     key="news_count"
                 )
