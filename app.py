@@ -118,6 +118,14 @@ st.set_page_config(page_title="News Dashboard", layout="wide", page_icon="graphi
 SetBackground('graphics/wwdc-glowing-violet-3840x2160-19118.png')
 #st.cache_data.clear()
 
+zoom_js = """
+<script>
+document.body.style.zoom = "90%";
+</script>
+"""
+
+st.markdown(zoom_js, unsafe_allow_html=True)
+
 try:
     # User Input
     topics= ["Top Stories⚡", "Technology", "Automobile", "AI", "Stock market", "Sports", "Finance", "Entertainment", "Science", "Politics", "Lifestyle", "Soccer", "Cricket", "F1"]
