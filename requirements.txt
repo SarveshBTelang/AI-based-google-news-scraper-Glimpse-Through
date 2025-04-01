@@ -26,8 +26,8 @@ cryptography
 cssselect
 debugpy
 decorator
-deep-translator==1.11.4
-defusedxml==0.7.1
+deep-translator
+defusedxml
 eval_type_backport
 exceptiongroup
 executing
@@ -93,7 +93,6 @@ platformdirs
 prometheus_client
 prompt_toolkit
 Protego
-protobuf
 psutil
 pure_eval
 pyarrow
