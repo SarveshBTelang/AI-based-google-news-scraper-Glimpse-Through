@@ -150,8 +150,6 @@ SetBackground('graphics/wwdc-glowing-violet-3840x2160-19118.png')
 #st.cache_data.clear()
 
 page_width = streamlit_js_eval(js_expressions='window.innerWidth', key='WIDTH',  want_output = True)
-page_width= 700
-print("criteria:", st.secrets["screen_size"])
 
 try:
     if page_width and page_width <= st.secrets["screen_size"]:
