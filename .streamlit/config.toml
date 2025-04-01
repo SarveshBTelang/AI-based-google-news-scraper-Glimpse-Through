@@ -1,0 +1,20 @@
+[theme]
+primaryColor ="rgb(197, 157, 243)"
+backgroundColor = "rgba(255, 255, 255, 0.01)"
+secondaryBackgroundColor = "rgba(25, 46, 87, 1)"
+textColor = "rgb(255, 255, 255)"
+
+
+[global]
+showWarningOnDirectExecution = false
+
+[runner]
+magicEnabled = true
+
+[server]
+headless = true
+port = 8501
+enableCORS = false
+
+[browser]
+gatherUsageStats = false
