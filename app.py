@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 import streamlit as st
 from streamlit_lottie import st_lottie
 from streamlit_js_eval import streamlit_js_eval
+import streamlit.components.v1 as components
 import base64
 from google import genai
 from deep_translator import GoogleTranslator
@@ -15,6 +16,8 @@ from mistralai import Mistral
 import traceback
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import pyautogui
+from screeninfo import get_monitors
 
 # custom
 import utils
@@ -146,9 +149,27 @@ def SetBackground(main_bg):
 # Streamlit layout
 st.set_page_config(page_title="News Dashboard", layout="wide", page_icon="graphics/enhance3.ico")
 SetBackground('graphics/wwdc-glowing-violet-3840x2160-19118.png')
-#st.cache_data.clear()
-
 page_width = streamlit_js_eval(js_expressions='window.innerWidth', key='WIDTH',  want_output = True)
+
+# Initialize a session state variable
+if "initialized" not in st.session_state:
+    st.session_state["initialized"] = True
+    resolution=[]
+    for monitor in get_monitors():
+        resolution.append(monitor.width/monitor.height)
+
+    if resolution[0] >= 1.6:
+        pyautogui.hotkey('ctrl', '0')
+        pyautogui.hotkey('ctrl', '-')
+        pyautogui.hotkey('ctrl', '-')
+    else:
+        if resolution[0] >= 1.6:
+            pyautogui.hotkey('ctrl', '0')
+            pyautogui.hotkey('ctrl', '-')
+            pyautogui.hotkey('ctrl', '-')
+            pyautogui.hotkey('ctrl', '-')
+
+    #st.cache_data.clear()
 
 try:
     if page_width and page_width <= st.secrets["screen_size"]:
@@ -176,6 +197,7 @@ try:
         except:
             pass
     else:
+        count=0
         zoom_js = """
         <script>
         document.body.style.zoom = "10%";
@@ -205,7 +227,7 @@ try:
         selected_topic = render_page(topics)
 
         news_count= 10
-        sources_count = 8
+        sources_count = 5
         region= list(region_list.keys())[0]
         region_code= '&hl=en'
         client_code=0
@@ -221,7 +243,7 @@ try:
                 unsafe_allow_html=True
             )
             st.markdown(
-                "<h1 style='font-size: 18px; text-align: right; margin-top: -30px; margin-bottom: -250px; margin-right: 60px; color: #d4c0fc'>A Smart Google News Scraper ✨</h1>", 
+                "<h1 style='font-size: 18px; text-align: right; margin-top: -30px; margin-bottom: -250px; margin-right: 60px; color: #d4c0fc'>A Smart Global News Curator ✨</h1>", 
                 unsafe_allow_html=True
             )
 
@@ -323,7 +345,7 @@ try:
                     )
 
                 with col5:
-                    isprioritize = st.checkbox("Topic-specific Sources", key="specialized_toggle", value= False)
+                    isprioritize = st.checkbox("Prioritize Topic-specific Sources", key="specialized_toggle", value= False)
 
                 # Second row dedicated for the submit button
                 button_col, empty1, empty2 = st.columns([1, 2, 1])
@@ -356,6 +378,7 @@ try:
                     position: absolute;
                     background: white;
                     color: midnightblue;
+                    font-weight: bold;
                     padding: 8px;
                     border-radius: 15px;
                     box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.2);
@@ -376,7 +399,7 @@ try:
 
                 <div class="info-container">
                     <div class="info-button">i</div>
-                    <div class="tooltip">How it works: Select News Category → Apply Filters (Optional) → Uses AI to extract top news sources in selected category → Scrapes latest articles from Google News (Publicly Available Search Results)</div>
+                    <div class="tooltip">How it works: Select News Category → Apply Filters (Optional) → Uses AI to extract top news sources → Scrapes headlines of latest articles from Google News (Publicly Available Search Results) → Summarizes key points</div>
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -443,6 +466,7 @@ try:
                 else:
                     print("Please wait.. Response is empty. Retrying...")
                     time.sleep(2)  # Wait for 2 seconds before retrying
+
             except Exception as e:
                 print("Error in extracting response from client 1:")
                 print(e)
@@ -473,12 +497,79 @@ try:
                         time.sleep(2)  # Wait for 2 seconds before retrying
                 except:
                     print("Error in extracting response from client 2:")
-                    print("Server Error.. Please try again after sometime :(")
+                    raise RuntimeError("Error retrieving response from API")
         else:
             isresponse= True
             client_code=3
-            defaults= ['The New York Times', 'The Guardian', 'DW News', 'Moneycontrol', 'Bloomberg', 'TechCrunch','Reuters','BBC','The Verge','WION', ]
-            extract_response = defaults[:sources_count]
+            defaults = {
+                'World': ['The New York Times', 'The Guardian', 'DW News', 'Moneycontrol', 
+                        'Bloomberg', 'TechCrunch', 'Reuters', 'BBC', 'The Verge', 'WION'],
+                
+                'USA': ['The New York Times', 'CNN', 'Fox News', 'The Washington Post', 
+                        'USA Today', 'The Wall Street Journal', 'NBC News', 
+                        'CBS News', 'ABC News', 'Reuters'],
+                
+                'GER': ['Bild.de', 'Die Welt', 'Frankfurter Allgemeine Zeitung', 'Zeit Online',
+                        'Süddeutsche Zeitung', 'Spiegel Online', 'Focus Online', 'Tagesschau', 'Handelsblatt', 'n-tv'],
+                
+                'IND (eng)': ['The Economic Times', 'The Times of India', 'Hindustan Times', 'India Today', 'The Indian Express', 'NDTV', 
+                            'The Hindu', 'Zee News', 'News18', 'Scroll.in'],
+                
+                'IND (hindi)': ['Dainik Bhaskar', 'Dainik Jagran', 'Amar Ujala', 'Navbharat Times', 
+                                'Hindustan', 'Patrika', 'Punjab Kesari', 
+                                'Rajasthan Patrika', 'Jagran Josh', 'Zee News Hindi'],
+                
+                'UK': ['BBC News', 'The Guardian', 'The Independent', 'The Telegraph', 
+                    'Sky News', 'Daily Mail', 'Evening Standard', 'Financial Times', 
+                    'The Times', 'Metro'],
+                
+                'AUS': ['ABC News Australia', 'The Sydney Morning Herald', 'The Australian', 
+                        '9News', 'The Age', 'The Guardian Australia', 'news.com.au', 
+                        'SBS News', 'Herald Sun', 'Sky News Australia'],
+                
+                'CAN': ['CBC News', 'The Globe and Mail', 'CTV News', 'National Post', 
+                        'Toronto Star', 'Global News', 'Maclean’s', 'The Toronto Sun', 
+                        'The Huffington Post Canada', 'Financial Post'],
+                
+                'FRA': ['Le Monde', 'Le Figaro', 'France 24', 'Libération', 
+                        'L’Express', 'Le Parisien', 'BFM TV', 'RFI', 
+                        'La Croix', 'Challenges'],
+                
+                'ESP': ['El País', 'El Mundo', 'ABC España', 'La Vanguardia', 
+                        'El Confidencial', '20 Minutos', 'OK Diario', 
+                        'La Razón', 'Europa Press', 'Cadena SER'],
+                
+                'ITA': ['Corriere della Sera', 'La Repubblica', 'Il Sole 24 Ore', 'ANSA', 
+                        'La Stampa', 'Il Giornale', 'Rai News', 'Tgcom24', 
+                        'Il Fatto Quotidiano', 'AGI'],
+                
+                'NL': ['De Telegraaf', 'Algemeen Dagblad', 'de Volkskrant', 'NRC Handelsblad', 
+                    'Het Parool', 'RTL Nieuws', 'NOS', 'Trouw', 
+                    'BNR Nieuwsradio', 'Het Financieele Dagblad'],
+                
+                'PT': ['Público', 'Diário de Notícias', 'Expresso', 'Correio da Manhã', 
+                    'Jornal de Notícias', 'RTP Notícias', 'Observador', 'SIC Notícias', 
+                    'TVI24', 'O Jogo'],
+                
+                'BRA': ['Folha de S.Paulo', 'O Globo', 'Estadão', 'G1', 
+                        'UOL Notícias', 'Veja', 'R7', 'Correio Braziliense', 
+                        'Terra', 'Jornal do Brasil'],
+                
+                'RUS': ['RT', 'TASS', 'RIA Novosti', 'Kommersant', 
+                        'Izvestia', 'Lenta.ru', 'Vedomosti', 'Sputnik News', 
+                        'Argumenty i Fakty', 'Fontanka'],
+                
+                'CHN': ['Xinhua', 'People’s Daily', 'Global Times', 'China Daily', 
+                        'Sina News', 'Phoenix TV', 'The Paper', 'Caixin', 
+                        'South China Morning Post', 'China News Service'],
+                
+                'JPN': ['NHK News', 'Asahi Shimbun', 'Yomiuri Shimbun', 'Mainichi Shimbun', 
+                        'Nikkei Asia', 'The Japan Times', 'Kyodo News', 'Jiji Press', 
+                        'Fuji News Network', 'Tokyo Shimbun']
+            }
+            selected_region_defaults = defaults.get(region, ['The New York Times', 'The Guardian', 'DW News', 'Moneycontrol', 
+                        'Bloomberg', 'TechCrunch', 'Reuters', 'BBC', 'The Verge', 'WION'])
+            extract_response = selected_region_defaults[:sources_count]
 
         try:
             hostname = socket.gethostname()
@@ -498,10 +589,10 @@ try:
                 time_of_request= datetime.now().isoformat()
                 os_info= os_info
                 client_code= client_code
-
                 # Append data
                 row = [host_name, time_of_request, os_info, client_code, topic, region, sources_count, news_count, isprioritize]
                 sh.append_row(row)
+        
         except Exception as e2:
             print("Error in saving user data: ", e2)
 
@@ -536,7 +627,7 @@ try:
                 background-color: transparent;
                 color: lavender;
                 padding: 10px;
-                font-family: monospace;
+                font-family: Verdana;
                 font-size: 19px;
             ">
 
@@ -621,8 +712,7 @@ try:
 
                 displayNextLine();
             </script>
-            """
-            
+            """  
             with main_col[1]:
                 # Render the animated text in Streamlit
                 st.components.v1.html(html_code, height=200)
@@ -634,7 +724,126 @@ try:
 
             st.session_state.loading_complete = True
 
+            # Combine all titles into a single list
+            all_news = []
+            for df in news_df_sorted:
+                all_news.extend(df['Title'].tolist())  # Extract titles from each dataframe
+
+            # Join the titles into a single block of text, separated by new lines
+            combined_titles = "\n".join(all_news)
+
+            try:
+                response_ticker = client1.models.generate_content(
+                    model="gemini-2.0-flash",
+                    contents= f"Summarize the key points and provide important highlights based on the following news titles:\n{combined_titles}"
+                )
+                if response_ticker.text and response_ticker.text.strip():
+                    ticker= response_ticker.text
+                else:
+                    ticker=""
+            except:
+                try:
+                    response_ticker = client2.chat.complete(
+                        model="mistral-large-latest",
+                        messages=[
+                            {
+                                "role": "user",
+                                "content": "Summarize the key points and provide important highlights based on the following news titles:\n"+combined_titles,
+                            },
+                        ]
+                    )
+
+                    response_ticker_text= response_ticker.choices[0].message.content
+
+                    if response_ticker_text:
+                        ticker= response_ticker_text
+                    else:
+                        ticker=""
+                except:
+                    ticker=""
+
             loading_placeholder.empty()
+            text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', ticker)
+            scroll_text = text.replace('*', '|')
+
+            html_code = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    #scroll-container {{
+                        width: 100%;
+                        overflow: hidden;
+                        background-color: rgba(25, 46, 87, 0.4);
+                        border-top: 2px solid white;
+                        border-bottom: 2px solid white;
+                        position: relative;
+                    }}
+
+                    #scroll-text {{
+                        display: inline-block;
+                        white-space: nowrap;
+                        color: white;
+                        font-size: 20px;
+                        font-family: Verdana;
+                        position: relative;
+                        left: 100%;
+                        cursor: pointer;
+                    }}
+
+                    #summary-block {{
+                        position: absolute;
+                        left: 0;
+                        margin-left: -5px;
+                        top: 50%;
+                        transform: translateY(-50%) skewX(-10deg);
+                        background-color: rgba(255, 0, 0, 0.7);
+                        color: white;
+                        padding: 10px;
+                        font-size: 20px;
+                        font-weight: bold;
+                        font-family: Verdana;
+                        z-index: 10;
+                        transform-origin: left center;
+                    }}
+                </style>
+            </head>
+            <body>
+                <div id="scroll-container">
+                    <div id="summary-block">Summary</div>
+                    <div id="scroll-text">{scroll_text}</div>
+                </div>
+                
+                <script>
+                    let scrollText = document.getElementById('scroll-text');
+                    let scrollSpeed = 1;
+                    let paused = false;
+
+                    function scrollTextLeft() {{
+                        if (paused) return;
+
+                        if (scrollText.getBoundingClientRect().right <= 0) {{
+                            scrollText.style.left = '100%';
+                        }} else {{
+                            scrollText.style.left = (parseInt(scrollText.style.left, 10) - scrollSpeed) + 'px';
+                        }}
+                    }}
+
+                    scrollText.style.position = 'relative';
+                    scrollText.style.left = '100%';
+                    let intervalID = setInterval(scrollTextLeft, 10);
+
+                    scrollText.addEventListener('mouseover', () => {{
+                        paused = true;
+                    }});
+                    scrollText.addEventListener('mouseout', () => {{
+                        paused = false;
+                    }});
+                </script>
+            </body>
+            </html>
+            """
+            components.html(html_code, height=60)
 
             # Custom CSS for horizontal scrolling with fixed blocks
             scroll_item_height = news_count*35  # For example, 215vh. You may change this value dynamically.
@@ -649,7 +858,7 @@ try:
                     margin: 0;
                     padding: 0;
                     box-sizing: border-box;
-                    font-family: "Grifinito L", sans-serif;
+                    font-family: Verdana;
                 }}
                 
                 html, body {{
@@ -780,7 +989,9 @@ try:
             except (KeyError, IndexError):
                 # If an error occurs, update all DataFrames
                 for df in news_df_sorted:
-                    df.loc[0, 'Medium'] = 'news.png'
+                    df['Medium'] = df['Medium'].astype(object)
+                    df.loc[0, 'Medium'] = 'https://img.icons8.com/?size=100&id=p1yIKD1Sjsp1&format=png&color=000000'
+                    df.loc[0, 'Source'] = 'Sorry, no results found.. Please try a different search term!'
 
             if sources_count >= 1:
                 news_content0 = "<div class='news-container'>"
