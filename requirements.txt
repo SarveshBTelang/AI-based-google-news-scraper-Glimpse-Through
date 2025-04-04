@@ -100,7 +100,7 @@ pure_eval
 pyarrow
 pyasn1
 pyasn1_modules
-pyautogui
+pyautogui==0.9.46
 pycparser
 pydantic
 pydantic_core
