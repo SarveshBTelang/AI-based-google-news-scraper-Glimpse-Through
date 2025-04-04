@@ -16,8 +16,9 @@ from mistralai import Mistral
 import traceback
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-import pyautogui
+#import pyautogui
 from screeninfo import get_monitors
+import keyboard
 
 # custom
 import utils
@@ -159,15 +160,20 @@ if "initialized" not in st.session_state:
         resolution.append(monitor.width/monitor.height)
 
     if resolution[0] >= 1.6:
-        pyautogui.hotkey('ctrl', '0')
-        pyautogui.hotkey('ctrl', '-')
-        pyautogui.hotkey('ctrl', '-')
+        keyboard.press_and_release('ctrl+minus')
+        keyboard.press_and_release('ctrl+minus')
+        #pyautogui.hotkey('ctrl', '0')
+        #pyautogui.hotkey('ctrl', '-')
+        #pyautogui.hotkey('ctrl', '-')
     else:
         if resolution[0] >= 1.6:
-            pyautogui.hotkey('ctrl', '0')
-            pyautogui.hotkey('ctrl', '-')
-            pyautogui.hotkey('ctrl', '-')
-            pyautogui.hotkey('ctrl', '-')
+            keyboard.press_and_release('ctrl+minus')
+            keyboard.press_and_release('ctrl+minus')
+            keyboard.press_and_release('ctrl+minus')
+            #pyautogui.hotkey('ctrl', '0')
+            #pyautogui.hotkey('ctrl', '-')
+            #pyautogui.hotkey('ctrl', '-')
+            #pyautogui.hotkey('ctrl', '-')
 
     #st.cache_data.clear()
 
