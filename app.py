@@ -16,9 +16,6 @@ from mistralai import Mistral
 import traceback
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-#import pyautogui
-from screeninfo import get_monitors
-import keyboard
 
 # custom
 import utils
@@ -70,7 +67,7 @@ def render_page(topics):
         div.stButton > button {
             background: linear-gradient(to bottom, midnightblue, transparent);
             color: white;
-            font-size: 20px;
+            font-size: 14px;
             font-weight: bold;
             border: none;
             border-radius: 15px; /* Rounded edges with a 15px radius */
@@ -152,31 +149,6 @@ st.set_page_config(page_title="News Dashboard", layout="wide", page_icon="graphi
 SetBackground('graphics/wwdc-glowing-violet-3840x2160-19118.png')
 page_width = streamlit_js_eval(js_expressions='window.innerWidth', key='WIDTH',  want_output = True)
 
-# Initialize a session state variable
-if "initialized" not in st.session_state:
-    st.session_state["initialized"] = True
-    resolution=[]
-    for monitor in get_monitors():
-        resolution.append(monitor.width/monitor.height)
-
-    if resolution[0] >= 1.6:
-        keyboard.press_and_release('ctrl+minus')
-        keyboard.press_and_release('ctrl+minus')
-        #pyautogui.hotkey('ctrl', '0')
-        #pyautogui.hotkey('ctrl', '-')
-        #pyautogui.hotkey('ctrl', '-')
-    else:
-        if resolution[0] >= 1.6:
-            keyboard.press_and_release('ctrl+minus')
-            keyboard.press_and_release('ctrl+minus')
-            keyboard.press_and_release('ctrl+minus')
-            #pyautogui.hotkey('ctrl', '0')
-            #pyautogui.hotkey('ctrl', '-')
-            #pyautogui.hotkey('ctrl', '-')
-            #pyautogui.hotkey('ctrl', '-')
-
-    #st.cache_data.clear()
-
 try:
     if page_width and page_width <= st.secrets["screen_size"]:
         st.title("Unsupported Device Display Resolution :(")
@@ -204,13 +176,6 @@ try:
             pass
     else:
         count=0
-        zoom_js = """
-        <script>
-        document.body.style.zoom = "10%";
-        </script>
-        """
-
-        st.markdown(zoom_js, unsafe_allow_html=True)
         # User Input
         topics= ["Top Stories⚡", "Technology", "Automobile", "AI", "Stock market", "Sports", "Finance", "Entertainment", "Science", "Politics", "Lifestyle", "Soccer", "Cricket", "F1"]
         region_list= {'World':'&hl=en','USA':'&hl=en&gl=US&ceid=US:en', 'GER':'&hl=de&gl=DE&ceid=DE:de', 'IND (eng)':'&hl=en&gl=IN&ceid=IN:en', 'IND (hindi)':'&hl=hi&gl=IN&ceid=IN:hi', 'UK':'&hl=en&gl=GB&ceid=GB:en', 'AUS':'&hl=en&gl=AU&ceid=AU:en', 'CAN':'&hl=en&gl=CA&ceid=CA:en', 'FRA':'&hl=fr&gl=FR&ceid=FR:fr', 'ESP':'&hl=es&gl=ES&ceid=ES:es', 'ITA':'&hl=it&gl=IT&ceid=IT:it', 'NL':'&hl=nl&gl=NL&ceid=NL:nl', 'PT':'&hl=pt-PT&gl=PT&ceid=PT:pt-PT', 'BRA':'&hl=pt-BR&gl=BR&ceid=BR:pt-BR', 'RUS':'&hl=ru&gl=RU&ceid=RU:ru', 'CHN':'&hl=zh-CN&gl=CN&ceid=CN:zh-CN', 'JPN':'&hl=ja&gl=JP&ceid=JP:ja'}
@@ -233,7 +198,7 @@ try:
         selected_topic = render_page(topics)
 
         news_count= 10
-        sources_count = 5
+        sources_count = 4
         region= list(region_list.keys())[0]
         region_code= '&hl=en'
         client_code=0
@@ -245,18 +210,18 @@ try:
         col1_image, col2_title, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12, col13, col14, col15, col16, col17, col18 = st.columns([1,5,1,1,1,1,1,1,1,1,0.5,0.5,0.5, 0.5, 0.5, 0.5, 0.5, 0.5])  # Adjust ratio as needed
         with col2_title:
             st.markdown(
-                "<h1 style='font-size: 55px;'>Glimpse Through</h1>", 
+                "<h1 style='font-size: 44px;'>Glimpse Through</h1>", 
                 unsafe_allow_html=True
             )
             st.markdown(
-                "<h1 style='font-size: 18px; text-align: right; margin-top: -30px; margin-bottom: -250px; margin-right: 60px; color: #d4c0fc'>A Smart Global News Curator ✨</h1>", 
+                "<h1 style='font-size: 14px; text-align: right; margin-top: -30px; margin-bottom: -250px; margin-right: 60px; color: #d4c0fc'>A Smart Global News Curator✨</h1>", 
                 unsafe_allow_html=True
             )
 
 
         with col1_image:
             #st.image("enhance3.png", width=85)
-            st_lottie(lottie_animation2, speed=1, reverse=True, height=100, loop=True, quality="high", key="logo")
+            st_lottie(lottie_animation2, speed=1, reverse=True, height=80, loop=True, quality="high", key="logo")
 
         st.markdown(
             """
@@ -275,12 +240,12 @@ try:
                 /* Target the dropdown text */
                 div[data-baseweb="select"] * {
                     color: lavender !important;
-                    font-size: 18px !important; /* Set font size */
+                    font-size: 14px !important; /* Set font size */
                 }
 
                 /* Global font size for all text */
                 body, div, span, input, textarea, select, option {
-                    font-size: 18px !important; /* Apply font size globally */
+                    font-size: 14px !important; /* Apply font size globally */
                 }
             </style>
             """,
@@ -337,7 +302,7 @@ try:
                         "News Sources Count:",
                         min_value=1,
                         max_value=10,
-                        value=5,
+                        value=4,
                         key="sources_count"
                     )
 
@@ -405,7 +370,7 @@ try:
 
                 <div class="info-container">
                     <div class="info-button">i</div>
-                    <div class="tooltip">How it works: Select News Category → Apply Filters (Optional) → Uses AI to extract top news sources → Scrapes headlines of latest articles from Google News (Publicly Available Search Results) → Summarizes key points</div>
+                    <div class="tooltip">How it works: Select News Category → Apply Filters (Optional) → Uses AI to extract top news sources → Scrapes headlines of latest articles from Google News (Publicly Available Search Results) → Summarizes major news</div>
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -414,12 +379,15 @@ try:
         if "loading_complete" not in st.session_state:
             st.session_state.loading_complete = False
 
+        progress_text = "Loading..."
+        my_bar = st.progress(0, text=progress_text)
+
         if custom_selected_topic and selected_topic== None:
             lottie_animation1 = utils.get("graphics/Animation_9.json")
-            ht= 450
+            ht= 430
         else:
             lottie_animation1 = utils.get("graphics/Animation_7.json")
-            ht= 300
+            ht= 280
 
         loading_placeholder = st.empty()
 
@@ -445,6 +413,10 @@ try:
                 topic= topics[0]
             else:
                 topic= topics[1]
+        
+        for percent_complete in range(0, 10):
+            time.sleep(0.01)
+            my_bar.progress(percent_complete + 1, text=progress_text)
 
         if topic== "Top Stories⚡":
             prompt= None
@@ -457,7 +429,14 @@ try:
                 prompt+= f"Prioritize sources that are specifically renowned for covering {topic} over general sources."
             display_text= f"Searching for the top {sources_count} news sources in {region} that are most relevant to {topic}...🔍"
 
+        for percent_complete in range(10, 20):
+            time.sleep(0.01)
+            my_bar.progress(percent_complete + 1, text=progress_text)
+        
         if prompt:
+            for percent_complete in range(20, 30):
+                time.sleep(0.01)
+                my_bar.progress(percent_complete + 1, text=progress_text)
             try:
                 response = client1.models.generate_content(
                     model="gemini-2.0-flash",
@@ -504,7 +483,13 @@ try:
                 except:
                     print("Error in extracting response from client 2:")
                     raise RuntimeError("Error retrieving response from API")
+            for percent_complete in range(30, 40):
+                time.sleep(0.01)
+                my_bar.progress(percent_complete + 1, text=progress_text)
         else:
+            for percent_complete in range(20, 40):
+                time.sleep(0.01)
+                my_bar.progress(percent_complete + 1, text=progress_text)
             isresponse= True
             client_code=3
             defaults = {
@@ -518,11 +503,11 @@ try:
                 'GER': ['Bild.de', 'Die Welt', 'Frankfurter Allgemeine Zeitung', 'Zeit Online',
                         'Süddeutsche Zeitung', 'Spiegel Online', 'Focus Online', 'Tagesschau', 'Handelsblatt', 'n-tv'],
                 
-                'IND (eng)': ['The Economic Times', 'The Times of India', 'Hindustan Times', 'India Today', 'The Indian Express', 'NDTV', 
-                            'The Hindu', 'Zee News', 'News18', 'Scroll.in'],
+                'IND (eng)': ['The Economic Times', 'The Times of India', 'Moneycontrol', 'Hindustan Times', 'India Today', 'The Indian Express', 'NDTV', 
+                            'The Hindu', 'Zee News', 'News18'],
                 
-                'IND (hindi)': ['Dainik Bhaskar', 'Dainik Jagran', 'Amar Ujala', 'Navbharat Times', 
-                                'Hindustan', 'Patrika', 'Punjab Kesari', 
+                'IND (hindi)': ['Dainik Bhaskar', 'Moneycontrol', 'Amar Ujala', 'Navbharat Times', 
+                                'Dainik Jagran', 'Patrika', 'Punjab Kesari', 
                                 'Rajasthan Patrika', 'Jagran Josh', 'Zee News Hindi'],
                 
                 'UK': ['BBC News', 'The Guardian', 'The Independent', 'The Telegraph', 
@@ -576,6 +561,9 @@ try:
             selected_region_defaults = defaults.get(region, ['The New York Times', 'The Guardian', 'DW News', 'Moneycontrol', 
                         'Bloomberg', 'TechCrunch', 'Reuters', 'BBC', 'The Verge', 'WION'])
             extract_response = selected_region_defaults[:sources_count]
+            for percent_complete in range(40, 60):
+                time.sleep(0.01)
+                my_bar.progress(percent_complete + 1, text=progress_text)
 
         try:
             hostname = socket.gethostname()
@@ -621,6 +609,10 @@ try:
                 output_lines.append("Connecting to sources...")
                 output_lines.append("Fetching news articles...")
                 output_lines.append(f"Please wait... ⏳")
+            
+            for percent_complete in range(40, 60):
+                time.sleep(0.01)
+                my_bar.progress(percent_complete + 1, text=progress_text)
 
             # Convert output_lines to list items
             lines_html = "".join(f"<li style='opacity: 0; margin: 5px 0;'>{line}</li>" for line in output_lines)
@@ -634,7 +626,7 @@ try:
                 color: lavender;
                 padding: 10px;
                 font-family: Verdana;
-                font-size: 19px;
+                font-size: 14px;
             ">
 
                 <ul style="list-style-type: none; padding: 0; margin: 0;">
@@ -727,6 +719,10 @@ try:
             for medium in extract_response:
                 df= webscraper.ScrapData(topic= topic, news_medium=medium, domain="https://news.google.com/", count=news_count, region=region_code, isenglish=isenglish, isdefault= isdefault) 
                 news_df_sorted.append(df)
+            
+            for percent_complete in range(60, 90):
+                time.sleep(0.01)
+                my_bar.progress(percent_complete + 1, text=progress_text)
 
             st.session_state.loading_complete = True
 
@@ -737,6 +733,8 @@ try:
 
             # Join the titles into a single block of text, separated by new lines
             combined_titles = "\n".join(all_news)
+
+            print(news_df_sorted[0].columns)
 
             try:
                 response_ticker = client1.models.generate_content(
@@ -767,6 +765,13 @@ try:
                         ticker=""
                 except:
                     ticker=""
+            
+            for percent_complete in range(90, 100):
+                time.sleep(0.01)
+                my_bar.progress(percent_complete + 1, text=progress_text)
+
+            time.sleep(1)
+            my_bar.empty()
 
             loading_placeholder.empty()
             text = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', ticker)
@@ -790,7 +795,7 @@ try:
                         display: inline-block;
                         white-space: nowrap;
                         color: white;
-                        font-size: 20px;
+                        font-size: 18px;
                         font-family: Verdana;
                         position: relative;
                         left: 100%;
@@ -806,7 +811,7 @@ try:
                         background-color: rgba(255, 0, 0, 0.7);
                         color: white;
                         padding: 10px;
-                        font-size: 20px;
+                        font-size: 18px;
                         font-weight: bold;
                         font-family: Verdana;
                         z-index: 10;
@@ -876,8 +881,8 @@ try:
 
                 /* Ensure the main content takes the full screen */
                 main {{
-                    height: 100vh;  /* Full viewport height */
-                    width: 100vw;   /* Full viewport width */
+                    height: 90vh;  /* Full viewport height */
+                    width: 90vw;   /* Full viewport width */
                     display: flex;
                     overflow: hidden;
                 }}
@@ -897,8 +902,8 @@ try:
                     justify-content: flex-start;
                     overflow-x: scroll;
                     height: 100%;
-                    gap: 14px;
-                    padding: 50px;
+                    gap: 12px;
+                    padding: 40px;
                     scroll-behavior: smooth;
                     width: 150%;
                 }}
@@ -906,7 +911,7 @@ try:
                 /* Each news article block inside scroll */
                 .scroll-item {{
                     min-width: 25vw;  /* Decrease size to fit more columns */
-                    max-width: 80vw;  /* Prevent items from becoming too wide */
+                    max-width: 75vw;  /* Prevent items from becoming too wide */
                     height: {scroll_item_height}vh;  /* Dynamic height: change scroll_item_height to adjust */
                     background: linear-gradient(to bottom, 
                         rgba(255, 255, 255, 0.98) 0%,   
@@ -915,7 +920,7 @@ try:
                         rgba(255, 210, 180, 0.6) 90%,  
                         rgba(255, 200, 160, 0.9) 100%
                     );
-                    padding: 30px;
+                    padding: 24px;
                     border-radius: 15px;
                     text-align: center;
                     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -979,8 +984,8 @@ try:
 
                 .block__number, .block__title {{
                     text-transform: uppercase;
-                    font-size: 2rem;
-                    line-height: 1.06rem;
+                    font-size: 1.6rem;
+                    line-height: 0.9rem;
                     color: #000;
                 }}
                 </style>
@@ -1007,17 +1012,17 @@ try:
                     <div style="display: flex; align-items: center; margin-bottom: 10px; position: relative;">
                         <div style="flex: 1; padding-bottom: 8px;">
                             <p>
-                                <a href="{row['Link']}" target="_blank" style="font-size: 20px; font-weight: bold; text-decoration: none; color: black;">
+                                <a href="{row['Link']}" target="_blank" style="font-size: 16px; font-weight: bold; text-decoration: none; color: black;">
                                     {row['Title']}
                                 </a>
                                 <br>
-                                <span style="font-size: 12px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
+                                <span style="font-size: 10px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
                             </p>
                         </div>
                         <div style="flex-shrink: 0; margin-left: 15px;">
-                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 230px; height: auto; border-radius: 5px;">
+                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 185px; height: auto; border-radius: 5px;">
                         </div>
-                        <div style="position: absolute; bottom: 3px; left: 50px; width: 25%; height: 1px; background-color: black;"></div>
+                        <div style="position: absolute; bottom: 3px; left: 40px; width: 25%; height: 1px; background-color: black;"></div>
                     </div>
                     """
                 news_content0+= "</div>"
@@ -1030,15 +1035,15 @@ try:
                     <div style="display: flex; align-items: center; margin-bottom: 10px; position: relative;">
                         <div style="flex: 1; padding-bottom: 8px;">
                             <p>
-                                <a href="{row['Link']}" target="_blank" style="font-size: 20px; font-weight: bold; text-decoration: none; color: black;">
+                                <a href="{row['Link']}" target="_blank" style="font-size: 16px; font-weight: bold; text-decoration: none; color: black;">
                                     {row['Title']}
                                 </a>
                                 <br>
-                                <span style="font-size: 12px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
+                                <span style="font-size: 10px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
                             </p>
                         </div>
                         <div style="flex-shrink: 0; margin-left: 15px;">
-                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 230px; height: auto; border-radius: 5px;">
+                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 185px; height: auto; border-radius: 5px;">
                         </div>
                         <div style="position: absolute; bottom: 3px; left: 50px; width: 25%; height: 1px; background-color: black;"></div>
                     </div>
@@ -1053,15 +1058,15 @@ try:
                     <div style="display: flex; align-items: center; margin-bottom: 10px; position: relative;">
                         <div style="flex: 1; padding-bottom: 8px;">
                             <p>
-                                <a href="{row['Link']}" target="_blank" style="font-size: 20px; font-weight: bold; text-decoration: none; color: black;">
+                                <a href="{row['Link']}" target="_blank" style="font-size: 16px; font-weight: bold; text-decoration: none; color: black;">
                                     {row['Title']}
                                 </a>
                                 <br>
-                                <span style="font-size: 12px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
+                                <span style="font-size: 10px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
                             </p>
                         </div>
                         <div style="flex-shrink: 0; margin-left: 15px;">
-                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 230px; height: auto; border-radius: 5px;">
+                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 185px; height: auto; border-radius: 5px;">
                         </div>
                         <div style="position: absolute; bottom: 3px; left: 50px; width: 25%; height: 1px; background-color: black;"></div>
                     </div>
@@ -1076,15 +1081,15 @@ try:
                     <div style="display: flex; align-items: center; margin-bottom: 10px; position: relative;">
                         <div style="flex: 1; padding-bottom: 8px;">
                             <p>
-                                <a href="{row['Link']}" target="_blank" style="font-size: 20px; font-weight: bold; text-decoration: none; color: black;">
+                                <a href="{row['Link']}" target="_blank" style="font-size: 16px; font-weight: bold; text-decoration: none; color: black;">
                                     {row['Title']}
                                 </a>
                                 <br>
-                                <span style="font-size: 12px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
+                                <span style="font-size: 10px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
                             </p>
                         </div>
                         <div style="flex-shrink: 0; margin-left: 15px;">
-                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 230px; height: auto; border-radius: 5px;">
+                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 185px; height: auto; border-radius: 5px;">
                         </div>
                         <div style="position: absolute; bottom: 3px; left: 50px; width: 25%; height: 1px; background-color: black;"></div>
                     </div>
@@ -1099,15 +1104,15 @@ try:
                     <div style="display: flex; align-items: center; margin-bottom: 10px; position: relative;">
                         <div style="flex: 1; padding-bottom: 8px;">
                             <p>
-                                <a href="{row['Link']}" target="_blank" style="font-size: 20px; font-weight: bold; text-decoration: none; color: black;">
+                                <a href="{row['Link']}" target="_blank" style="font-size: 16px; font-weight: bold; text-decoration: none; color: black;">
                                     {row['Title']}
                                 </a>
                                 <br>
-                                <span style="font-size: 12px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
+                                <span style="font-size: 10px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
                             </p>
                         </div>
                         <div style="flex-shrink: 0; margin-left: 15px;">
-                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 230px; height: auto; border-radius: 5px;">
+                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 185px; height: auto; border-radius: 5px;">
                         </div>
                         <div style="position: absolute; bottom: 3px; left: 50px; width: 25%; height: 1px; background-color: black;"></div>
                     </div>
@@ -1122,15 +1127,15 @@ try:
                     <div style="display: flex; align-items: center; margin-bottom: 10px; position: relative;">
                         <div style="flex: 1; padding-bottom: 8px;">
                             <p>
-                                <a href="{row['Link']}" target="_blank" style="font-size: 20px; font-weight: bold; text-decoration: none; color: black;">
+                                <a href="{row['Link']}" target="_blank" style="font-size: 16px; font-weight: bold; text-decoration: none; color: black;">
                                     {row['Title']}
                                 </a>
                                 <br>
-                                <span style="font-size: 12px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
+                                <span style="font-size: 10px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
                             </p>
                         </div>
                         <div style="flex-shrink: 0; margin-left: 15px;">
-                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 230px; height: auto; border-radius: 5px;">
+                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 185px; height: auto; border-radius: 5px;">
                         </div>
                         <div style="position: absolute; bottom: 3px; left: 50px; width: 25%; height: 1px; background-color: black;"></div>
                     </div>
@@ -1145,15 +1150,15 @@ try:
                     <div style="display: flex; align-items: center; margin-bottom: 10px; position: relative;">
                         <div style="flex: 1; padding-bottom: 8px;">
                             <p>
-                                <a href="{row['Link']}" target="_blank" style="font-size: 20px; font-weight: bold; text-decoration: none; color: black;">
+                                <a href="{row['Link']}" target="_blank" style="font-size: 16px; font-weight: bold; text-decoration: none; color: black;">
                                     {row['Title']}
                                 </a>
                                 <br>
-                                <span style="font-size: 12px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
+                                <span style="font-size: 10px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
                             </p>
                         </div>
                         <div style="flex-shrink: 0; margin-left: 15px;">
-                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 230px; height: auto; border-radius: 5px;">
+                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 185px; height: auto; border-radius: 5px;">
                         </div>
                         <div style="position: absolute; bottom: 3px; left: 50px; width: 25%; height: 1px; background-color: black;"></div>
                     </div>
@@ -1168,15 +1173,15 @@ try:
                     <div style="display: flex; align-items: center; margin-bottom: 10px; position: relative;">
                         <div style="flex: 1; padding-bottom: 8px;">
                             <p>
-                                <a href="{row['Link']}" target="_blank" style="font-size: 20px; font-weight: bold; text-decoration: none; color: black;">
+                                <a href="{row['Link']}" target="_blank" style="font-size: 16px; font-weight: bold; text-decoration: none; color: black;">
                                     {row['Title']}
                                 </a>
                                 <br>
-                                <span style="font-size: 12px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
+                                <span style="font-size: 10px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
                             </p>
                         </div>
                         <div style="flex-shrink: 0; margin-left: 15px;">
-                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 230px; height: auto; border-radius: 5px;">
+                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 185px; height: auto; border-radius: 5px;">
                         </div>
                         <div style="position: absolute; bottom: 3px; left: 50px; width: 25%; height: 1px; background-color: black;"></div>
                     </div>
@@ -1191,15 +1196,15 @@ try:
                     <div style="display: flex; align-items: center; margin-bottom: 10px; position: relative;">
                         <div style="flex: 1; padding-bottom: 8px;">
                             <p>
-                                <a href="{row['Link']}" target="_blank" style="font-size: 20px; font-weight: bold; text-decoration: none; color: black;">
+                                <a href="{row['Link']}" target="_blank" style="font-size: 16px; font-weight: bold; text-decoration: none; color: black;">
                                     {row['Title']}
                                 </a>
                                 <br>
-                                <span style="font-size: 12px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
+                                <span style="font-size: 10px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
                             </p>
                         </div>
                         <div style="flex-shrink: 0; margin-left: 15px;">
-                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 230px; height: auto; border-radius: 5px;">
+                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 185px; height: auto; border-radius: 5px;">
                         </div>
                         <div style="position: absolute; bottom: 3px; left: 50px; width: 25%; height: 1px; background-color: black;"></div>
                     </div>
@@ -1214,15 +1219,15 @@ try:
                     <div style="display: flex; align-items: center; margin-bottom: 10px; position: relative;">
                         <div style="flex: 1; padding-bottom: 8px;">
                             <p>
-                                <a href="{row['Link']}" target="_blank" style="font-size: 20px; font-weight: bold; text-decoration: none; color: black;">
+                                <a href="{row['Link']}" target="_blank" style="font-size: 16px; font-weight: bold; text-decoration: none; color: black;">
                                     {row['Title']}
                                 </a>
                                 <br>
-                                <span style="font-size: 12px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
+                                <span style="font-size: 10px; color: gray;">{row['Source']} | {row['Author']} | {row['Time']}</span>
                             </p>
                         </div>
                         <div style="flex-shrink: 0; margin-left: 15px;">
-                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 230px; height: auto; border-radius: 5px;">
+                            <img src="{row['Thumbnail']}" alt="Thumbnail" style="width: 185px; height: auto; border-radius: 5px;">
                         </div>
                     </div>
                     """
@@ -1235,53 +1240,53 @@ try:
                     <div class="main">
                         <div class="scroll-container">
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
+                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
                                 {news_content0}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[1]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[1]['Source'][0]}</p>
+                                <img src="{news_df_sorted[1]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[1]['Source'][0]}</p>
                                 {news_content1}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[2]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[2]['Source'][0]}</p>
+                                <img src="{news_df_sorted[2]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[2]['Source'][0]}</p>
                                 {news_content2}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[3]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[3]['Source'][0]}</p>
+                                <img src="{news_df_sorted[3]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[3]['Source'][0]}</p>
                                 {news_content3}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[4]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[4]['Source'][0]}</p>
+                                <img src="{news_df_sorted[4]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[4]['Source'][0]}</p>
                                 {news_content4}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[5]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[5]['Source'][0]}</p>
+                                <img src="{news_df_sorted[5]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[5]['Source'][0]}</p>
                                 {news_content5}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[6]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[6]['Source'][0]}</p>
+                                <img src="{news_df_sorted[6]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[6]['Source'][0]}</p>
                                 {news_content6}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[7]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[7]['Source'][0]}</p>
+                                <img src="{news_df_sorted[7]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[7]['Source'][0]}</p>
                                 {news_content7}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[8]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[8]['Source'][0]}</p>
+                                <img src="{news_df_sorted[8]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[8]['Source'][0]}</p>
                                 {news_content8}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[9]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[9]['Source'][0]}</p>
+                                <img src="{news_df_sorted[9]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[9]['Source'][0]}</p>
                                 {news_content9}
                             </div>
                         </div>
@@ -1296,48 +1301,48 @@ try:
                     <div class="main">
                         <div class="scroll-container">
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
+                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
                                 {news_content0}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[1]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[1]['Source'][0]}</p>
+                                <img src="{news_df_sorted[1]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[1]['Source'][0]}</p>
                                 {news_content1}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[2]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[2]['Source'][0]}</p>
+                                <img src="{news_df_sorted[2]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[2]['Source'][0]}</p>
                                 {news_content2}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[3]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[3]['Source'][0]}</p>
+                                <img src="{news_df_sorted[3]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[3]['Source'][0]}</p>
                                 {news_content3}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[4]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[4]['Source'][0]}</p>
+                                <img src="{news_df_sorted[4]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[4]['Source'][0]}</p>
                                 {news_content4}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[5]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[5]['Source'][0]}</p>
+                                <img src="{news_df_sorted[5]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[5]['Source'][0]}</p>
                                 {news_content5}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[6]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[6]['Source'][0]}</p>
+                                <img src="{news_df_sorted[6]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[6]['Source'][0]}</p>
                                 {news_content6}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[7]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[7]['Source'][0]}</p>
+                                <img src="{news_df_sorted[7]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[7]['Source'][0]}</p>
                                 {news_content7}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[8]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[8]['Source'][0]}</p>
+                                <img src="{news_df_sorted[8]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[8]['Source'][0]}</p>
                                 {news_content8}
                             </div>
                         </div>
@@ -1352,43 +1357,43 @@ try:
                     <div class="main">
                         <div class="scroll-container">
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
+                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
                                 {news_content0}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[1]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[1]['Source'][0]}</p>
+                                <img src="{news_df_sorted[1]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[1]['Source'][0]}</p>
                                 {news_content1}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[2]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[2]['Source'][0]}</p>
+                                <img src="{news_df_sorted[2]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[2]['Source'][0]}</p>
                                 {news_content2}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[3]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[3]['Source'][0]}</p>
+                                <img src="{news_df_sorted[3]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[3]['Source'][0]}</p>
                                 {news_content3}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[4]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[4]['Source'][0]}</p>
+                                <img src="{news_df_sorted[4]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[4]['Source'][0]}</p>
                                 {news_content4}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[5]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[5]['Source'][0]}</p>
+                                <img src="{news_df_sorted[5]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[5]['Source'][0]}</p>
                                 {news_content5}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[6]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[6]['Source'][0]}</p>
+                                <img src="{news_df_sorted[6]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[6]['Source'][0]}</p>
                                 {news_content6}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[7]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[7]['Source'][0]}</p>
+                                <img src="{news_df_sorted[7]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[7]['Source'][0]}</p>
                                 {news_content7}
                             </div>
                         </div>
@@ -1403,38 +1408,38 @@ try:
                     <div class="main">
                         <div class="scroll-container">
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
+                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
                                 {news_content0}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[1]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[1]['Source'][0]}</p>
+                                <img src="{news_df_sorted[1]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[1]['Source'][0]}</p>
                                 {news_content1}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[2]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[2]['Source'][0]}</p>
+                                <img src="{news_df_sorted[2]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[2]['Source'][0]}</p>
                                 {news_content2}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[3]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[3]['Source'][0]}</p>
+                                <img src="{news_df_sorted[3]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[3]['Source'][0]}</p>
                                 {news_content3}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[4]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[4]['Source'][0]}</p>
+                                <img src="{news_df_sorted[4]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[4]['Source'][0]}</p>
                                 {news_content4}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[5]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[5]['Source'][0]}</p>
+                                <img src="{news_df_sorted[5]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[5]['Source'][0]}</p>
                                 {news_content5}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[6]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[6]['Source'][0]}</p>
+                                <img src="{news_df_sorted[6]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[6]['Source'][0]}</p>
                                 {news_content6}
                             </div>
                         </div>
@@ -1449,33 +1454,33 @@ try:
                     <div class="main">
                         <div class="scroll-container">
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
+                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
                                 {news_content0}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[1]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[1]['Source'][0]}</p>
+                                <img src="{news_df_sorted[1]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[1]['Source'][0]}</p>
                                 {news_content1}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[2]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[2]['Source'][0]}</p>
+                                <img src="{news_df_sorted[2]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[2]['Source'][0]}</p>
                                 {news_content2}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[3]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[3]['Source'][0]}</p>
+                                <img src="{news_df_sorted[3]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[3]['Source'][0]}</p>
                                 {news_content3}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[4]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[4]['Source'][0]}</p>
+                                <img src="{news_df_sorted[4]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[4]['Source'][0]}</p>
                                 {news_content4}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[5]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[5]['Source'][0]}</p>
+                                <img src="{news_df_sorted[5]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[5]['Source'][0]}</p>
                                 {news_content5}
                             </div>
                         </div>
@@ -1490,28 +1495,28 @@ try:
                     <div class="main">
                         <div class="scroll-container">
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
+                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
                                 {news_content0}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[1]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[1]['Source'][0]}</p>
+                                <img src="{news_df_sorted[1]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[1]['Source'][0]}</p>
                                 {news_content1}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[2]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[2]['Source'][0]}</p>
+                                <img src="{news_df_sorted[2]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[2]['Source'][0]}</p>
                                 {news_content2}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[3]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[3]['Source'][0]}</p>
+                                <img src="{news_df_sorted[3]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[3]['Source'][0]}</p>
                                 {news_content3}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[4]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[4]['Source'][0]}</p>
+                                <img src="{news_df_sorted[4]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[4]['Source'][0]}</p>
                                 {news_content4}
                             </div>
                         </div>
@@ -1526,23 +1531,23 @@ try:
                     <div class="main">
                         <div class="scroll-container">
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
+                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
                                 {news_content0}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[1]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[1]['Source'][0]}</p>
+                                <img src="{news_df_sorted[1]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[1]['Source'][0]}</p>
                                 {news_content1}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[2]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[2]['Source'][0]}</p>
+                                <img src="{news_df_sorted[2]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[2]['Source'][0]}</p>
                                 {news_content2}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[3]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[3]['Source'][0]}</p>
+                                <img src="{news_df_sorted[3]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[3]['Source'][0]}</p>
                                 {news_content3}
                             </div>
                         </div>
@@ -1557,18 +1562,18 @@ try:
                     <div class="main">
                         <div class="scroll-container">
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
+                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
                                 {news_content0}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[1]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[1]['Source'][0]}</p>
+                                <img src="{news_df_sorted[1]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[1]['Source'][0]}</p>
                                 {news_content1}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[2]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[2]['Source'][0]}</p>
+                                <img src="{news_df_sorted[2]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[2]['Source'][0]}</p>
                                 {news_content2}
                             </div>
                         </div>
@@ -1583,13 +1588,13 @@ try:
                     <div class="main">
                         <div class="scroll-container">
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
+                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
                                 {news_content0}
                             </div>
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[1]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[1]['Source'][0]}</p>
+                                <img src="{news_df_sorted[1]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[1]['Source'][0]}</p>
                                 {news_content1}
                             </div>
                         </div>
@@ -1604,8 +1609,8 @@ try:
                     <div class="main">
                         <div class="scroll-container">
                             <div class="scroll-item" style="width: 200px; white-space: normal; overflow-wrap: break-word;">
-                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: %; border-radius: 10px;">
-                                <p style="font-size: 18px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
+                                <img src="{news_df_sorted[0]['Medium'][0]}" alt="News Image" style="width: 20%; border-radius: 10px;">
+                                <p style="font-size: 14px; font-weight: bold; color: #555; margin-top: 5px; text-align: center;">{news_df_sorted[0]['Source'][0]}</p>
                                 {news_content0}
                             </div>
                         </div>

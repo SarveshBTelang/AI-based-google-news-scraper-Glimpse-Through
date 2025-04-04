@@ -126,7 +126,6 @@ rfc3986-validator
 rpds-py
 rsa
 Scrapy
-screeninfo
 Send2Trash
 service-identity
 setuptools
