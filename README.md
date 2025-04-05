@@ -2,7 +2,7 @@
 
 ![How It Works...](glimpsethrough.png)
 
-Simple yet useful web application based on Streamlit called "𝗚𝗹𝗶𝗺𝗽𝘀𝗲 𝗧𝗵𝗿𝗼𝘂𝗴𝗵":  
+A Simple yet useful web application based on Streamlit called "𝗚𝗹𝗶𝗺𝗽𝘀𝗲 𝗧𝗵𝗿𝗼𝘂𝗴𝗵":  
 
 ⏩ Provides real-time insights into news articles across various domains  
 ⏩ Leverages AI and web scraping to deliver the most relevant news stories based on selected topics, regions, and user preferences  
