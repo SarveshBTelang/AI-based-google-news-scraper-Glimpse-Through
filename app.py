@@ -1003,6 +1003,10 @@ try:
                     df['Medium'] = df['Medium'].astype(object)
                     df.loc[0, 'Medium'] = 'https://img.icons8.com/?size=100&id=p1yIKD1Sjsp1&format=png&color=000000'
                     df.loc[0, 'Source'] = 'Sorry, no results found.. Please try a different search term!'
+            
+            for i in range(len(news_df_sorted)):
+                if 'Time' not in news_df_sorted[i].columns:
+                    news_df_sorted[i]['Time'] = ""
 
             if sources_count >= 1:
                 news_content0 = "<div class='news-container'>"
