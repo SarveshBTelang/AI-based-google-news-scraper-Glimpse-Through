@@ -1,5 +1,4 @@
 # Glimpse Through: AI-based-google-news-scraper
-
 ![Tutorial](glimpsethrough_tutorial.gif)
 
 ![How It Works...](glimpsethrough.png)
