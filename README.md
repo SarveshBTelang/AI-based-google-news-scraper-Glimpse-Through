@@ -1,5 +1,7 @@
 # Glimpse Through: AI-based-google-news-scraper
 
+![Tutorial](glimpsethrough_tutorial.gif)
+
 ![How It Works...](glimpsethrough.png)
 
 A Simple yet useful web application based on Streamlit called "𝗚𝗹𝗶𝗺𝗽𝘀𝗲 𝗧𝗵𝗿𝗼𝘂𝗴𝗵":  
